@@ -21,12 +21,13 @@ def main():
         st.write(edited_response)
 
 def generate_response(email_text):
+    input_text = "Patient Email: {}\n\nClinician Response:".format(email_text)
     payload = {
-        "inputs": email_text,
+        "inputs": input_text,
         "options": {
             "generate_explanations": True,
             "num_beams": 5,
-            "max_length": 1000,
+            "max_length": 150,
             "early_stopping": True
         }
     }
