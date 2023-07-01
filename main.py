@@ -2,7 +2,8 @@ import streamlit as st
 import openai
 
 def generate_response(email_text):
-    openai.api_key = "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"
+    api_key = st.sidebar.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+    openai.api_key = api_key
 
     try:
         response = openai.Completion.create(
@@ -23,22 +24,16 @@ def generate_response(email_text):
         return None
 
 def main():
-    # Set page title
-    st.set_page_config(page_title="Email Assistant")
+    st.title("Email Response Generator")
 
-    # Set up sidebar
-    st.sidebar.title("Email Assistant")
-
-    # Get user input
-    email_text = st.text_area("Enter the email text")
+    # Input email text
+    email_text = st.text_area("Enter the email text", height=200)
 
     # Generate response
     if st.button("Generate Response"):
-        if email_text:
-            response = generate_response(email_text)
-            st.success(response)
-        else:
-            st.warning("Please enter some email text.")
+        response = generate_response(email_text)
+        if response:
+            st.text_area("Generated Response", value=response, height=200)
 
 if __name__ == "__main__":
     main()
