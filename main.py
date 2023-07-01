@@ -2,24 +2,25 @@ import streamlit as st
 import openai
 
 def generate_response(email_text):
-    # Set up OpenAI API credentials
     openai.api_key = "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"
 
-    # Generate response using OpenAI API
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=email_text,
-        max_tokens=100,
-        temperature=0.7,
-        n=1,
-        stop=None,
-        top_p=None,
-        frequency_penalty=None,
-        presence_penalty=None,
-        log_level=None
-    )
-
-    return response.choices[0].text.strip()
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=email_text,
+            max_tokens=100,
+            temperature=0.7,
+            n=1,
+            stop=None,
+            top_p=None,
+            frequency_penalty=None,
+            presence_penalty=None,
+            log_level=None
+        )
+        return response.choices[0].text.strip()
+    except Exception as e:
+        print("OpenAI API Error:", e)
+        return None
 
 def main():
     # Set page title
