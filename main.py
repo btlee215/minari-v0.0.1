@@ -1,39 +1,37 @@
 import streamlit as st
 import openai
 
-def generate_response(email_text):
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=email_text,
-            max_tokens=100,
-            temperature=0.7,
-            n=1,
-            stop=None,
-            top_p=None,
-            frequency_penalty=None,
-            presence_penalty=None,
-            log_level=None
-        )
-        return response.choices[0].text.strip()
-    except Exception as e:
-        print("OpenAI API Error:", e)
-        return None
+# Function to retrieve the OpenAI API key from the user
+def get_openai_api_key():
+    openai_api_key = st.sidebar.text_input("OpenAI API Key", key="openai_api_key", type="password")
+    return openai_api_key
 
-def main():
-    st.title("Email Response Generator")
-
-    api_key = st.sidebar.text_input("OpenAI API Key", key="openai_api_key", type="password")
+# Function to generate the response using the OpenAI API
+def generate_response(email_text, api_key):
     openai.api_key = api_key
 
-    # Input email text
-    email_text = st.text_area("Enter the email text", height=200)
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=email_text,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.7
+    )
 
-    # Generate response
+    return response.choices[0].text.strip()
+
+def main():
+    # Retrieve the OpenAI API key from the user
+    api_key = get_openai_api_key()
+
+    # Get the user's email input
+    email_text = st.text_area("Enter your email text", height=200)
+
+    # Generate the response using the OpenAI API
     if st.button("Generate Response"):
-        response = generate_response(email_text)
-        if response:
-            st.text_area("Generated Response", value=response, height=200)
+        response = generate_response(email_text, api_key)
+        st.markdown(f"**Response:**\n{response}")
 
 if __name__ == "__main__":
     main()
