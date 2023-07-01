@@ -26,6 +26,10 @@ def generate_response(email_text):
 def main():
     st.title("Email Response Generator")
 
+    with st.sidebar:
+        st.subheader("Settings")
+        api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+
     # Input email text
     email_text = st.text_area("Enter the email text", height=200)
 
