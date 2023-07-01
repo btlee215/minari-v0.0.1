@@ -26,7 +26,7 @@ def generate_response(email_text):
         "inputs": input_text,
         "options": {
             "generate_explanations": True,
-            "num_beams": 5,
+            "num_beams": 10,
             "max_length": 3000,  # Set a larger value for max_length
             "early_stopping": True
         }
