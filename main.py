@@ -1,43 +1,25 @@
 import streamlit as st
-import openai
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
-# Function to retrieve the OpenAI API key from the user
-def get_openai_api_key():
-    openai_api_key = st.sidebar.text_input("OpenAI API Key", key="openai_api_key", type="password")
-    return openai_api_key
+def generate_response(email_text):
+    model_name = "google/flan-t5-xxl"
+    tokenizer = T5Tokenizer.from_pretrained(model_name)
+    model = T5ForConditionalGeneration.from_pretrained(model_name)
 
-# Function to generate the response using the OpenAI API
-def generate_response(email_text, api_key):
-    openai.api_key = api_key
-
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=email_text,
-            max_tokens=50,
-            n=1,
-            stop=None,
-            temperature=0.7
-        )
-
-        return response.choices[0].text.strip()
-
-    except Exception as e:
-        st.error(f"Error generating response: {str(e)}")
-        return None
+    prompt = f"Email: {email_text.strip()} \nResponse:"
+    inputs = tokenizer.encode(prompt, return_tensors="pt")
+    outputs = model.generate(inputs, max_length=200, num_beams=5, early_stopping=True)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
 
 def main():
-    # Retrieve the OpenAI API key from the user
-    api_key = get_openai_api_key()
+    st.title("Patient Email Responder")
 
-    # Get the user's email input
-    email_text = st.text_area("Enter your email text", height=200)
-
-    # Generate the response using the OpenAI API
+    email_text = st.text_area("Enter the email text:")
     if st.button("Generate Response"):
-        response = generate_response(email_text, api_key)
-        if response:
-            st.markdown(f"**Response:**\n{response}")
+        response = generate_response(email_text)
+        st.text("Generated Response:")
+        st.text(response)
 
 if __name__ == "__main__":
     main()
