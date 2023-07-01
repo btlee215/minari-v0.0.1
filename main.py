@@ -1,12 +1,26 @@
 import streamlit as st
-from transformers import pipeline
+import openai
 
-# Load the language model
-model = pipeline("text-generation", model="gpt2")
+# Set up OpenAI API credentials
+openai.api_key = "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"
 
 def generate_response(email_text):
-    # Process the email text using the language model
-    generated_text = model(email_text, max_length=100)[0]['generated_text']
+    # Construct the prompt with a system message
+    prompt = f"Prompt: You are a doctor with great bedside manner. You received an email from a patient:\n\n{email_text}\n\nResponse:"
+
+    # Make a request to the OpenAI API for text generation
+    response = openai.Completion.create(
+        engine="davinci-codex",  # GPT-3.5 engine
+        prompt=prompt,
+        max_tokens=100,
+        temperature=0.7,
+        n=1,
+        stop=None,
+        temperature=0.7
+    )
+    
+    # Extract the generated response from the API response
+    generated_text = response.choices[0].text.strip()
     
     # Return the generated response
     return generated_text
@@ -14,7 +28,7 @@ def generate_response(email_text):
 def main():
     # Set the title and description of the app
     st.title("Email Response Generator")
-    st.markdown("Enter an email and generate a response using the language model.")
+    st.markdown("Enter an email and generate a response with the voice of a clinician with great bedside manner.")
 
     # Input email text
     email_text = st.text_area("Enter the email text", height=200)
