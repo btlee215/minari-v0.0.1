@@ -27,7 +27,7 @@ def generate_response(email_text):
         "options": {
             "generate_explanations": True,
             "num_beams": 5,
-            "max_length": 150,
+            "max_length": 1000,
             "early_stopping": True
         }
     }
