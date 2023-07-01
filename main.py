@@ -10,16 +10,21 @@ def get_openai_api_key():
 def generate_response(email_text, api_key):
     openai.api_key = api_key
 
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=email_text,
-        max_tokens=50,
-        n=1,
-        stop=None,
-        temperature=0.7
-    )
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=email_text,
+            max_tokens=50,
+            n=1,
+            stop=None,
+            temperature=0.7
+        )
 
-    return response.choices[0].text.strip()
+        return response.choices[0].text.strip()
+
+    except Exception as e:
+        st.error(f"Error generating response: {str(e)}")
+        return None
 
 def main():
     # Retrieve the OpenAI API key from the user
@@ -31,7 +36,8 @@ def main():
     # Generate the response using the OpenAI API
     if st.button("Generate Response"):
         response = generate_response(email_text, api_key)
-        st.markdown(f"**Response:**\n{response}")
+        if response:
+            st.markdown(f"**Response:**\n{response}")
 
 if __name__ == "__main__":
     main()
