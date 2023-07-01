@@ -4,10 +4,6 @@ import requests
 API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-xxl"
 headers = {"Authorization": "Bearer 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"}
 
-def query(payload):
-    response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
-
 def main():
     st.title("Patient Email Assistant")
     st.subheader("Input Email")
@@ -19,23 +15,28 @@ def main():
     if st.button("Generate Response"):
         response = generate_response(email_text)
         st.subheader("Generated Response")
-        if isinstance(response, list):
-            response_text = response[0]["generated_text"]
-        else:
-            response_text = response.get("generated_text")
-        edited_response = st.text_area("Edit the response", value=response_text, height=200)
+        edited_response = st.text_area("Edit the response", value=response["generated_text"], height=200)
         st.write("Modified Response:")
         st.write(edited_response)
 
 def generate_response(email_text):
-    prompt = "As an experienced clinician, I understand your concerns. Based on your email, I would like to provide you with the following insights and possible next steps:"
-    input_text = f"{prompt}\n{email_text}"
-
     payload = {
-        "inputs": input_text,
+        "inputs": email_text,
+        "options": {
+            "generate_explanations": True,
+            "num_beams": 5,
+            "max_length": 500,
+            "early_stopping": True,
+            "no_repeat_ngram_size": 3,
+            "length_penalty": 1.5
+        }
     }
     response = query(payload)
     return response
+
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 
 if __name__ == "__main__":
     main()
