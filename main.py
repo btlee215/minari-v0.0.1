@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 # Set up OpenAI API credentials
-openai.api_key = "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"
+openai.api_key = "YOUR_API_KEY"
 
 def generate_response(email_text):
     # Construct the prompt with a system message
@@ -15,8 +15,7 @@ def generate_response(email_text):
         max_tokens=100,
         temperature=0.7,
         n=1,
-        stop=None,
-        temperature=0.7
+        stop=None
     )
     
     # Extract the generated response from the API response
