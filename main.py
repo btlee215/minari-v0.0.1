@@ -15,7 +15,8 @@ def main():
     if st.button("Generate Response"):
         response = generate_response(email_text)
         st.subheader("Generated Response")
-        edited_response = st.text_area("Edit the response", value=response["generated_text"], height=200)
+        generated_text = response["generated_text"]
+        edited_response = st.text_area("Edit the response", value=generated_text, height=200)
         st.write("Modified Response:")
         st.write(edited_response)
 
@@ -25,7 +26,7 @@ def generate_response(email_text):
         "options": {
             "generate_explanations": True,
             "num_beams": 5,
-            "max_length": 1000,
+            "max_length": 150,
             "early_stopping": True
         }
     }
