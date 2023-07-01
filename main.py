@@ -15,9 +15,10 @@ def main():
     if st.button("Generate Response"):
         response = generate_response(email_text)
         st.subheader("Generated Response")
-        edited_response = st.text_area("Edit the response", value=response["generated_text"], height=200)
-        st.write("Modified Response:")
-        st.write(edited_response)
+        if response and "generated_text" in response:
+            edited_response = st.text_area("Edit the response", value=response["generated_text"][0], height=200)
+            st.write("Modified Response:")
+            st.write(edited_response)
 
 def generate_response(email_text):
     payload = {
