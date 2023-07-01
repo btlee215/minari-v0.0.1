@@ -16,20 +16,15 @@ def main():
         response = generate_response(email_text)
         st.subheader("Generated Response")
         if response:
-            if isinstance(response, list) and len(response) > 0:
-                generated_text = response[0].get("generated_text", "")
-            elif isinstance(response, dict):
-                generated_text = response.get("generated_text", "")
-            else:
-                generated_text = ""
-                
+            generated_text = response.get("generated_text", "")
             edited_response = st.text_area("Edit the response", value=generated_text, height=200)
             st.write("Modified Response:")
             st.write(edited_response)
 
 def generate_response(email_text):
+    prompt = f"Patient Email: {email_text}\n\nClinician Response:"
     payload = {
-        "inputs": email_text,
+        "inputs": prompt,
         "options": {
             "generate_explanations": True,
             "num_beams": 10,
@@ -45,7 +40,4 @@ def generate_response(email_text):
 
 def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
-    return response.json()
-
-if __name__ == "__main__":
-    main()
+   
