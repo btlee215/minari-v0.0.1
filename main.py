@@ -19,7 +19,11 @@ def main():
     if st.button("Generate Response"):
         response = generate_response(email_text)
         st.subheader("Generated Response")
-        edited_response = st.text_area("Edit the response", value=response["generated_text"], height=200)
+        if isinstance(response, list):
+            response_text = response[0]["generated_text"]
+        else:
+            response_text = response.get("generated_text")
+        edited_response = st.text_area("Edit the response", value=response_text, height=200)
         st.write("Modified Response:")
         st.write(edited_response)
 
