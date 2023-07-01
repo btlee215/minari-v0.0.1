@@ -15,7 +15,7 @@ def main():
     if st.button("Generate Response"):
         response = generate_response(email_text)
         st.subheader("Generated Response")
-        generated_text = response[0]['generated_text']
+        generated_text = trim_response(response[0]['generated_text'], 1000)  # Trim to desired length
         edited_response = st.text_area("Edit the response", value=generated_text, height=200)
         st.write("Modified Response:")
         st.write(edited_response)
@@ -27,7 +27,7 @@ def generate_response(email_text):
         "options": {
             "generate_explanations": True,
             "num_beams": 5,
-            "max_length": 1000,
+            "max_length": 3000,  # Set a larger value for max_length
             "early_stopping": True
         }
     }
@@ -37,6 +37,13 @@ def generate_response(email_text):
 def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
+
+def trim_response(text, desired_length):
+    # Trim the text while preserving context and structure
+    words = text.split()
+    trimmed_words = words[:desired_length]
+    trimmed_text = " ".join(trimmed_words)
+    return trimmed_text
 
 if __name__ == "__main__":
     main()
