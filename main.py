@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 def generate_response(email_text):
-    openai.api_key = "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"
+    openai.api_key = "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"
 
     try:
         response = openai.Completion.create(
