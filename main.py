@@ -13,13 +13,16 @@ def main():
 
     # Generate button
     if st.button("Generate Response"):
-        response = generate_response(email_text)
-        st.subheader("Generated Response")
-        if response:
-            generated_text = response.get("generated_text", "")
-            edited_response = st.text_area("Edit the response", value=generated_text, height=200)
-            st.write("Modified Response:")
-            st.write(edited_response)
+        if email_text:
+            response = generate_response(email_text)
+            st.subheader("Generated Response")
+            if response:
+                generated_text = response.get("generated_text", "")
+                edited_response = st.text_area("Edit the response", value=generated_text, height=200)
+                st.write("Modified Response:")
+                st.write(edited_response)
+        else:
+            st.warning("Please enter an email before generating a response.")
 
 def generate_response(email_text):
     prompt = f"Patient Email: {email_text}\n\nClinician Response:"
@@ -40,4 +43,7 @@ def generate_response(email_text):
 
 def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
-   
+    return response.json()
+
+if __name__ == "__main__":
+    main()
