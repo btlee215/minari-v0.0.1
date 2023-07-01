@@ -1,25 +1,34 @@
 import streamlit as st
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-
-def generate_response(email_text):
-    model_name = "google/flan-t5-xxl"
-    tokenizer = T5Tokenizer.from_pretrained(model_name)
-    model = T5ForConditionalGeneration.from_pretrained(model_name)
-
-    prompt = f"Email: {email_text.strip()} \nResponse:"
-    inputs = tokenizer.encode(prompt, return_tensors="pt")
-    outputs = model.generate(inputs, max_length=200, num_beams=5, early_stopping=True)
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return response
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 def main():
-    st.title("Patient Email Responder")
+    st.title("Patient Email Assistant")
+    st.subheader("Input Email")
 
-    email_text = st.text_area("Enter the email text:")
+    # Load the T5 model and tokenizer
+    model_name = "google/flan-t5-xxl"
+    model = T5ForConditionalGeneration.from_pretrained(model_name)
+    tokenizer = T5Tokenizer.from_pretrained(model_name)
+
+    # Input text area
+    email_text = st.text_area("Enter the email", height=200)
+
+    # Generate button
     if st.button("Generate Response"):
-        response = generate_response(email_text)
-        st.text("Generated Response:")
-        st.text(response)
+        response = generate_response(email_text, model, tokenizer)
+        st.subheader("Generated Response")
+        st.write(response)
+
+def generate_response(email_text, model, tokenizer):
+    # Tokenize the input text
+    input_ids = tokenizer.encode(email_text, return_tensors="pt")
+
+    # Generate the response
+    output = model.generate(input_ids)
+
+    # Decode the generated output
+    response = tokenizer.decode(output[0], skip_special_tokens=True)
+    return response
 
 if __name__ == "__main__":
     main()
