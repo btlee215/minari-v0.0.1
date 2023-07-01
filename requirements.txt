@@ -1,5 +1,6 @@
 transformers==4.11.3
 torch==1.9.0
 langchain
-streamlit
 sentencepiece
+streamlit==0.88.0
+
