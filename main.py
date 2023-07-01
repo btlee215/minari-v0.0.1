@@ -32,11 +32,12 @@ def generate_response(email_text):
         "inputs": email_text,
         "options": {
             "generate_explanations": True,
-            "num_beams": 5,
-            "max_length": 500,
+            "num_beams": 10,
+            "max_length": 1000,
             "early_stopping": True,
             "no_repeat_ngram_size": 3,
-            "length_penalty": 1.5
+            "length_penalty": 1.2,
+            "temperature": 0.8
         }
     }
     response = query(payload)
