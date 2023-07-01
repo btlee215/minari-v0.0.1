@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 def generate_response(email_text):
-    api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+    api_key = st.sidebar.text_input("OpenAI API Key", key="openai_api_key", type="password")
     openai.api_key = api_key
 
     try:
@@ -28,7 +28,7 @@ def main():
 
     with st.sidebar:
         st.subheader("Settings")
-        api_key = st.text_input("OpenAI API Key", type="password")
+        api_key = st.text_input("OpenAI API Key", key="openai_api_key", type="password")
 
     # Input email text
     email_text = st.text_area("Enter the email text", height=200)
