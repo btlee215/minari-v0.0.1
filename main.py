@@ -25,7 +25,7 @@ def main():
             st.warning("Please enter an email before generating a response.")
 
 def generate_response(email_text):
-    prompt = f"A Patient sent a MyChart Email as follows: {email_text}\n\n You're an experienced clinician with excellent bedside manner. Please draft a 50+ word email Response providing helpful insights and next steps:"
+    prompt = f"Patient Email: {email_text}\n\nClinician Response:"
     payload = {
         "inputs": prompt,
         "options": {
