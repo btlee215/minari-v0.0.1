@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-xxl"
+API_URL = "https://api-inference.huggingface.co/models/openchat/openchat"
 headers = {"Authorization": "Bearer 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"}
 
 def main():
