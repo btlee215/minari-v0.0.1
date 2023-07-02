@@ -4,6 +4,14 @@ import requests
 API_URL = "https://api-inference.huggingface.co/models/medalpaca/medalpaca-13b"
 headers = {"Authorization": "Bearer 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"}
 
+from transformers import pipeline
+
+qa_pipeline = pipeline("question-answering", model="medalpaca/medalpaca-13b", tokenizer="medalpaca/medalpaca-13b")
+question = "What are the symptoms of diabetes?"
+context = "Diabetes is a metabolic disease that causes high blood sugar. The symptoms include increased thirst, frequent urination, and unexplained weight loss."
+answer = qa_pipeline({"question": question, "context": context})
+print(answer)
+
 def main():
     st.title("Patient Email Assistant")
     st.subheader("Input Email")
